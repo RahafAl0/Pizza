@@ -2,10 +2,13 @@ import js from "@eslint/js";
 import globals from "globals";
 import prettier from "eslint-config-prettier";
 import reactPlugin from "eslint-plugin-react";
-import { rules } from "@eslint/js/src/configs/eslint-all";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  {
+    ignores: ["dist/**", "node_modules/**", "src/routeTree.gen.ts"],
+  },
   js.configs.recommended,
   {
     ...reactPlugin.configs.flat.recommended,
@@ -15,9 +18,9 @@ export default [
       },
     },
   },
-  reactPlugin.configs.flat.recommended,
+  ...pluginQuery.configs["flat/recommended"],
   {
-    files: ["**/*.js,**/*.jsx"],
+    files: ["**/*.{js,jsx}"],
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
       parserOptions: {
@@ -27,7 +30,8 @@ export default [
       },
     },
     rules: {
-      "react/no-unscqped-entities": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/no-unescaped-entities": "off",
       "react/prop-types": "off",
     },
   },
